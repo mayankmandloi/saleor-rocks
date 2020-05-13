@@ -1,26 +1,59 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useEffect, useState } from 'react';
 import './App.css';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  const getData = async () => {
+    const data = await fetch('https://pwa.demo.saleor.rocks/graphql/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          query: `mutation {
+            tokenCreate(email: "admin@example.com", password: "admin") {
+              token
+            }
+          }`,
+        }),
+      });
+      const jsonData = await data.json();
+      const token: String = jsonData.data.tokenCreate.token;
+
+      const juiseData = await fetch('https://pwa.demo.saleor.rocks/graphql/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `${token}`
+        },
+        body: JSON.stringify({
+          query: `query {
+            products(first: 5) {
+              edges {
+                node {
+                  id
+                  name
+                  description
+                  images {
+                    id
+                    url
+                    alt
+                  }
+                }
+              }
+            }
+          }`,
+        }),
+      })
+      const nodesList = await juiseData.json();
+      setNodes(nodesList);
+  };
+
+  const [nodes, setNodes] = useState({});
+
+  useEffect(() => {
+    getData();
+  }, [])
+return (<h1> {JSON.stringify(nodes)}</h1>);
 }
 
 export default App;
