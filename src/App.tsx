@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
+import { makeStyles, Theme, createStyles, Grid, CssBaseline, Container } from '@material-ui/core';
 import './App.css';
 import { LeftMenuWrapper } from './view/leftmenu/left-menu-wrapper';
-import { makeStyles, Theme, createStyles, Grid, CssBaseline, Container } from '@material-ui/core';
+import PostCard01 from './view/mainsection/productcatlog/ProductCatlog';
 
 function App() {
   const getData = async () => {
@@ -47,10 +48,17 @@ function App() {
         }),
       })
       const nodesList = await juiseData.json();
+      console.log(nodesList);
       setNodes(nodesList);
   };
 
-  const [nodes, setNodes] = useState({});
+  const [nodes, setNodes] = useState({
+    data: {
+      products: {
+        edges:[]
+      }
+    }
+  });
 
   useEffect(() => {
     getData();
@@ -75,7 +83,7 @@ const classes = useStyles();
           <h1>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos repudiandae ipsum soluta, nostrum animi provident mollitia velit cum. Delectus sed quisquam quaerat nesciunt quos accusantium atque porro commodi possimus aperiam.</h1>
         </Grid>
         <Grid item xs={8}>
-          <h1>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae quas magni autem dolorem animi possimus. Itaque facere nemo, doloribus in blanditiis laborum dolor est consequuntur quaerat quia explicabo possimus hic.</h1>
+        <PostCard01 nodes={nodes.data.products.edges}/>
         </Grid>
       </Grid>
     </div>
