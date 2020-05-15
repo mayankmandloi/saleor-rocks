@@ -73,7 +73,7 @@ function App() {
 const classes = useStyles();
 
   return (
-    <Container maxWidth="xl">
+    <Container maxWidth="xl" data-testid="mainContainer">
       <div className={classes.root}>
       <Grid container spacing={1}>
         <Grid item xs={1}>
