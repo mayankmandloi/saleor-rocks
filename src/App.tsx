@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { makeStyles, Theme, createStyles, Grid, CssBaseline, Container } from '@material-ui/core';
+import { makeStyles, Theme, createStyles, Grid, CssBaseline, Container, CircularProgress } from '@material-ui/core';
 import './App.css';
 import { LeftMenuWrapper } from './view/leftmenu/left-menu-wrapper';
 import PostCard01 from './view/mainsection/productcatlog/ProductCatlog';
+import { ProductPreview } from './view/mainsection/productpreview/ProductPreview';
 
 function App() {
   const getData = async () => {
@@ -30,7 +31,7 @@ function App() {
         },
         body: JSON.stringify({
           query: `query {
-            products(first: 5) {
+            products(first: 12) {
               edges {
                 node {
                   id
@@ -48,8 +49,9 @@ function App() {
         }),
       })
       const nodesList = await juiseData.json();
-      console.log(nodesList);
       setNodes(nodesList);
+      console.log(nodesList.data.products.edges[0]);
+      setCurrentNode(nodesList.data.products.edges[0].node)
   };
 
   const [nodes, setNodes] = useState({
@@ -60,6 +62,17 @@ function App() {
     }
   });
 
+  const [currentNode, setCurrentNode] = useState({
+    id: '',
+    name: '',
+    description: '',
+    images: [{
+      id: '',
+      url: '',
+      alt: ''
+    }]
+  });
+
   useEffect(() => {
     getData();
   }, [])
@@ -68,10 +81,25 @@ function App() {
     root: {
       flexGrow: 1,
     },
+    loaderRoot: {
+      display: 'flex'
+    }
   }),
 );
 const classes = useStyles();
 
+const mainSection = () => {
+  if(Boolean(nodes.data.products.edges.length)){
+    return <>
+    <Grid item md={3} xs={5}><ProductPreview selectedNode={currentNode}/></Grid>
+    <Grid item md={8} xs={6}>
+    <PostCard01 nodes={nodes.data.products.edges}  setCurrentNode={setCurrentNode}/>
+    </Grid></>
+  }
+   return <Grid item xs={11} justify="center" alignItems="center" className={classes.loaderRoot}>
+      <CircularProgress size="60vh" />
+      </Grid>;
+}
   return (
     <Container maxWidth="xl" data-testid="mainContainer">
       <div className={classes.root}>
@@ -79,12 +107,7 @@ const classes = useStyles();
         <Grid item xs={1}>
           <LeftMenuWrapper></LeftMenuWrapper>
         </Grid>
-        <Grid item xs={3}>
-          <h1>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos repudiandae ipsum soluta, nostrum animi provident mollitia velit cum. Delectus sed quisquam quaerat nesciunt quos accusantium atque porro commodi possimus aperiam.</h1>
-        </Grid>
-        <Grid item xs={8}>
-        <PostCard01 nodes={nodes.data.products.edges}/>
-        </Grid>
+        {mainSection()}
       </Grid>
     </div>
     </Container>

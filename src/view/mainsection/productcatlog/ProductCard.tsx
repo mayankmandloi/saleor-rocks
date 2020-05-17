@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
@@ -22,11 +22,15 @@ const useStyles = makeStyles({
   },
 });
 
-export default function MediaCard(props: {node: {id: string| undefined; name:string| undefined; description: string| undefined; images:{id:string| undefined; url:string| undefined; alt:string| undefined}[]}}) {
+export default function MediaCard(props: {node: {id: string; name:string; description: string; images:{id:string; url:string; alt:string}[]}; setCurrentNode: Dispatch<SetStateAction<{ id: string; name: string; description: string; images: { id: string; url: string; alt: string; }[]; }>>}) {
   const classes = useStyles();
 
+  const setCurrentNode = () => {
+    props.setCurrentNode(props.node);
+  }
+
   return (
-    <Card className={classes.root}>
+    <Card className={classes.root} onClick={setCurrentNode}>
       <CardActionArea>
         <CardMedia
           className={classes.media}
