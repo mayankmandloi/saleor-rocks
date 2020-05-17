@@ -7,6 +7,9 @@ export const style = (theme: { breakpoints: { up: (arg0: string) => any; down: (
   },
   bottomIcon: {
     width: "100%",
+    '&>button': {
+      'min-width':'0px'
+    }
   },
   menuItem: {
       "flex-grow": 1,
@@ -21,7 +24,7 @@ export const style = (theme: { breakpoints: { up: (arg0: string) => any; down: (
       [theme.breakpoints.down('sm')]:{
         '& li': {
           margin: '0px',
-          padding: '10px',
+          padding: '10px 0px',
       }
     }
 
