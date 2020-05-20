@@ -88,7 +88,9 @@ function App() {
         flexGrow: 1
       },
       loaderRoot: {
-        display: 'flex'
+        display: 'flex',
+        justify: 'center',
+        'align-items': 'center'
       }
     })
   )
@@ -114,8 +116,6 @@ function App() {
       <Grid
         item
         xs={11}
-        justify="center"
-        alignItems="center"
         className={classes.loaderRoot}
       >
         <CircularProgress size="60vh" />

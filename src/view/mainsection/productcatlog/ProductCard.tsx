@@ -18,8 +18,8 @@ const useStyles = makeStyles({
   media: {
     height: 200,
     'background-size': 'contain'
-  },
-});
+  }
+})
 
 export default function MediaCard(props: {
   node: {
