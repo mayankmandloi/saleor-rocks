@@ -16,7 +16,8 @@ const useStyles = makeStyles({
     }
   },
   media: {
-    height: 200
+    height: 200,
+    'background-size': 'contain'
   }
 })
 
